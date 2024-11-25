@@ -68,29 +68,48 @@ if st.sidebar.button("Réinitialiser"):
 
 # Initialize Map
 tunisia_map = folium.Map(location=[33.8869, 9.5375], zoom_start=7)
-df = load_data(uploaded_file)
 
+# If GeoJSON is available, add it to the map
+if tunisia_geojson:
+    folium.GeoJson(
+        tunisia_geojson,
+        style_function=lambda feature: {
+            'fillColor': 'lightgrey',
+            'color': 'black',
+            'weight': 1,
+            'fillOpacity': 0.3,
+        },
+        tooltip=folium.GeoJsonTooltip(
+            fields=['deleg_na_1', 'gov_name_f'],
+            aliases=['Délégation:', 'Gouvernorat:']
+        ),
+    ).add_to(tunisia_map)
+
+# If file is uploaded, apply data to map
+if uploaded_file:
+    df = load_data(uploaded_file)
+    if df is not None:
         if 'Valeurs' in df.columns and 'Delegations' in df.columns:
             delegation_color_map = {
                 row['Delegations']: get_color(row['Valeurs'], intervals)
                 for _, row in df.iterrows()
             }
+            
+            folium.GeoJson(
+                tunisia_geojson,
+                style_function=lambda feature: {
+                    'fillColor': delegation_color_map.get(feature['properties']['deleg_na_1'], 'lightgrey'),
+                    'color': 'black',
+                    'weight': 1,
+                    'fillOpacity': 0.7 if feature['properties']['deleg_na_1'] in delegation_color_map else 0.3,
+                },
+                tooltip=folium.GeoJsonTooltip(
+                    fields=['deleg_na_1', 'gov_name_f'],
+                    aliases=['Délégation:', 'Gouvernorat:']
+                ),
+            ).add_to(tunisia_map)
         else:
             st.error("Le fichier doit contenir les colonnes 'Delegations' et 'Valeurs'.")
-            delegation_color_map = {}
 
-        folium.GeoJson(
-            tunisia_geojson,
-            style_function=lambda feature: {
-                'fillColor': delegation_color_map.get(feature['properties']['deleg_na_1'], 'lightgrey'),
-                'color': 'black',
-                'weight': 1,
-                'fillOpacity': 0.7 if feature['properties']['deleg_na_1'] in delegation_color_map else 0.3,
-            },
-            tooltip=folium.GeoJsonTooltip(
-                fields=['deleg_na_1', 'gov_name_f'],
-                aliases=['Délégation:', 'Gouvernorat:']
-            ),
-        ).add_to(tunisia_map)
-
-        st_folium(tunisia_map, width=700, height=900)
+# Display the map
+st_folium(tunisia_map, width=700, height=900)
