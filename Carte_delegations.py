@@ -64,7 +64,7 @@ intervals = [(interval, color) for interval, (_, color) in zip(interval_inputs, 
 
 # Reset Button
 if st.sidebar.button("Réinitialiser"):
-    st.experimental_rerun()
+    st.rerun()
 
 # Initialize Map
 tunisia_map = folium.Map(location=[33.8869, 9.5375], zoom_start=7)
