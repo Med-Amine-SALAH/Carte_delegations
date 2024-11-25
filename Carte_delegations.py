@@ -21,12 +21,12 @@ def load_data(file):
 
 # Predefined intervals for color mapping
 DEFAULT_INTERVALS = [
-    ("0-20", "yellow"),
-    ("21-40", "orange"),
-    ("41-60", "red"),
-    ("61-80", "purple"),
-    ("81-100", "blue"),
-    ("101+", "green")
+    ("0-1000", "yellow"),
+    ("1001-2000", "orange"),
+    ("2001-3000", "red"),
+    ("3001-4000", "purple"),
+    ("4001-5000", "blue"),
+    ("5001+", "green")
 ]
 
 # Function to map values to colors
