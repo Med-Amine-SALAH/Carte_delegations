@@ -1,0 +1,9 @@
+streamlit == 1.39.0
+pandas
+folium == 0.18.0
+streamlit-folium == 0.23.2
+<<<<<<< HEAD
+openpyxl == 3.1.5
+=======
+openpyxl == 3.1.5
+>>>>>>> 4883f0e7b7deec4d08f3f9e33107a1570a9c7949
