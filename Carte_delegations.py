@@ -67,11 +67,8 @@ if st.sidebar.button("Réinitialiser"):
     st.experimental_rerun()
 
 # Initialize Map
-if tunisia_geojson:
-    tunisia_map = folium.Map(location=[33.8869, 9.5375], zoom_start=7)
-
-    if uploaded_file:
-        df = load_data(uploaded_file)
+tunisia_map = folium.Map(location=[33.8869, 9.5375], zoom_start=7)
+df = load_data(uploaded_file)
 
         if 'Valeurs' in df.columns and 'Delegations' in df.columns:
             delegation_color_map = {
@@ -97,7 +94,3 @@ if tunisia_geojson:
         ).add_to(tunisia_map)
 
         st_folium(tunisia_map, width=700, height=900)
-    else:
-        st.info("Veuillez uploader un fichier pour voir les données.")
-else:
-    st.error("Le fichier n'est pas chargé. Veuillez vérifier le chemin.")
